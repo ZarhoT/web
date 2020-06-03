@@ -6,7 +6,7 @@
     $datos=0;
     
     if (!empty($_POST["correo"]) && !empty($_POST["clave"])) {
-        echo $_POST["correo"]; 
+        echo "$_POST["correo"]"; 
         $captura=new usuarios();
         $datos=$captura->getValidarUsuarios($_POST["correo"], $_POST["clave"]);
         if($datos==1){
