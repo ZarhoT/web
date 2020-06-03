@@ -19,6 +19,7 @@
             if ($conexion->connect_ernno){
                 echo "error";
             }
+            echo "conexion lista";
             return $conexion;
         }
 
