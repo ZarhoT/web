@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html ng-app="aplicacion">
+
+  <head>
+    <meta charset="UTF-8">
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!--angular-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+
+    <script>
+      var angularTodo=angular.module("aplicacion",[]);
+      angularTodo.controller("mainController",function($scope,$http){
+        $scope.names=[];
+        $http.get('includes/listarusuarios.php').then(function(promise){
+          $scope.names=promise.data
+          console.log(promise.data);
+        });
+
+        $scope.Eliminar=function(id){
+          if(confirm("Seguro???")){
+            console.log(id);
+            $http.post("includes/functionUsuario.php",{op:'delete',id:id}).then(function(promise){
+              console.log(promise.data);
+              $scope.names=[];
+              $http.get('includes/listarusuarios.php').then(function(promise){
+                $scope.names=promise.data
+                console.log(promise.data);
+              });
+            })
+          }
+        }
+      });
+    </script>
+  </head>
+
+  <body ng-controller="mainController">
+
+    <div class='container'>
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active" aria-current="page"><a href="?action=Vcrear">Crear (Create)</a></li>
+          <li class="breadcrumb-item"><a href="?action=leer">Leer (Read)</a></li>
+          <li class="breadcrumb-item"><a href="?action=modificar">Modificar (Update)</a></li>
+          <li class="breadcrumb-item"><a href="?action=eliminar">Eliminar (Delete)</a></li>
+        </ol>
+      </nav>
+
+
+      <div class="filtro">
+        <span>Buscar</span>
+        <input ng-model="BuscarRUT">
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre Completo</th>
+            <th scope="col">RUT</th>
+            <th scope="col">Pais</th>
+            <th scope="col">Ciudad</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Telefono</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="n in names| filter:BuscarRUT">
+            <th scope="row">{{n.id}}</th>
+            <td>{{n.nombre_completo}}</td>
+            <td>{{n.RUT}}</td>
+            <td>{{n.pais}}</td>
+            <td>{{n.ciudad}}</td>
+            <td>{{n.direccion}}</td>
+            <td>{{n.telefono}}</td>
+            <th scope="col"><a href='#' ng-click="Eliminar(n.id)">[X]</a></th>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </body>
+  
+</html>

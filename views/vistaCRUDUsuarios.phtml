@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script>
+            $(function(){
+                $("#pais").change(function(){
+                    var pais=$(this).val();
+                    console.log(pais);
+                    $.ajax({  
+                        method:"POST",
+                        url:"includes/ciudades.php",
+                        data: {id:pais},
+                        dataType:"text",
+                        success: function(data){
+                            $("#ciudad").html(data);
+                            /*for(var i=0;i<data.length;i++){
+                                $("#ciudad").append("<option value='"+data[i].id+"'>"+data[i].nombre+"</option>");
+                            }*/
+                        }
+                    });
+                });
+            });
+        </script>
+
+    </head>
+
+    <body>
+        
+        <div class="container">
+            <?php echo "Bienvenido ".$correo;?>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page"><a href="?action=Vcrear">Crear (Create)</a></li>
+                    <li class="breadcrumb-item" aria-current="page"><a href="?action=leer"">Leer (Read)</a></li>
+                    <li class="breadcrumb-item" aria-current="page"><a href="?action=modificar"">Modificar (Update)</a></li>
+                    <li class="breadcrumb-item" aria-current="page"><a href="?action=eliminar"">Eliminar (Delete)</a></li>
+                </ol>
+            </nav>
+            <form id="formulario" method="POST" action="?action=crear">
+                <?php if($insertar) echo "<span style='color:red;'>Datos Creados</span>"; ?>
+
+                <div class="form-group" >
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required="true">
+                </div>
+
+                <div class="form-group">
+                    <label for="rut">RUT</label>
+                    <input type="text" class="form-control" id="rut" name="rut" required="true">
+                </div>
+
+                <div class="form-group">
+                    <label for="pais">Pais</label>
+                    <select class="custom-select" id="pais" name="pais">
+                        <option selected>Seleccione País</option>
+                        <?php 
+                            foreach ($paises as $pais) {
+                                echo "<option value='".$pais["id"]."'>".$pais["nombre"]."</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ciudad">Ciudad</label>
+                    <select class="custom-select" id="ciudad" name="ciudad">
+                        <option selected>Seleccione Ciudad</option>
+            
+                    </select>
+                </div>
+
+                <div class="form-group" >
+                    <label for="direccion">Dirección</label>
+                    <input type="text" class="form-control" id="direccion" name="direccion" required="true">
+                </div>
+
+                <div class="form-group" >
+                    <label for="telefono">Telefono</label>
+                    <input type="tel" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}" id="telefono" name="telefono" required="true">Formato: 123-456-78
+                </div>
+
+                <div class="form-group" >
+                    <label for="fechanacimiento">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="fechanacimiento" name="fechanacimiento" required="true">
+                </div>
+                
+                <button type="submit" class="btn btn_primary">Submit</button>
+            </form>
+        
+        </div>
+
+    </body>
+
+</html>
