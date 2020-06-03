@@ -16,6 +16,9 @@
 
         public function conexion(){
             $conexion=new mysqli($this->servidor,$this->usuario,$this->clave,$this->dbase);
+            if ($conexion->connect_ernno){
+                echo "error";
+            }
             return $conexion;
         }
 
